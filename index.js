@@ -1,19 +1,19 @@
 //DOMの読み込みが完了したときに処理を実行する
-//Ecma es6
+//Ecma es7
 //()=>{} アロー関数
 window.addEventListener('DOMContentLoaded', () => {
-    const tiles = Array.from(document.querySelectorAll('.tile'));//格子リスト
+    const tiles = Array.from(document.querySelectorAll('.tile'));//格子➞配列に似たオブジェクトから配列を作る
     const playerDisplay = document.querySelector('.display-player');
     const resetButton = document.querySelector('#reset');
-    const announcer = document.querySelector('.announcer');
-    let board = ['', '', '', '', '', '', '', '', ''];
-    let currentPlayer = 'X';
-    let isGameActive = true;
+    const announcer = document.querySelector('.announcer');//アナウンサー
+    let board = ['', '', '', '', '', '', '', '', ''];//ボード
+    let currentPlayer = 'X';//初期化プレイヤー
+    let isGameActive = true;//ゲームアクティブ
 
-    const PLAYERX_WON = 'PLAYERX_WON';//Xが勝ちます
-    const PLAYERO_WON = 'PLAYERO_WON';//Yがかちます
+    const PLAYERX_WON = 'PLAYERX_WON';//Xが勝つ
+    const PLAYERO_WON = 'PLAYERO_WON';//Yが勝つ
     const TIE = 'TIE';//引き分け
-    //勝利条件
+    //勝利条件全部8パターン
     const winningConditions = [
         [0, 1, 2],
         [3, 4, 5],
@@ -41,14 +41,16 @@ window.addEventListener('DOMContentLoaded', () => {
                 break;
             }
         }
-    //勝ったひとが出たらお知らせ
+    //勝ったひとが出たらお知らせとゲーム終了
     if (roundWon) {
             announce(currentPlayer === 'X' ? PLAYERX_WON : PLAYERO_WON);
             isGameActive = false;
             return;
         }
-    //勝ったひとが出ない、さらに入力場所もない→引き分けになります。
-    if (!board.includes(''))//入力場所まだあるかどうか判定します。
+    //勝ったひとが出ない、入力場所もない→引き分けになります。
+    //配列内にある要素が含まれているかどうかを調べる
+    //入力場所まだあるかどうか判定します。
+    if (!board.includes(''))
         announce(TIE);
     }
     //お知らせ処理
@@ -65,11 +67,11 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         announcer.classList.remove('hide');
     };
-    //格子
+    //格子にxかoを入れる
     const updateBoard =  (index) => {
         board[index] = currentPlayer;
     }
-
+    //選手交代
     const changePlayer = () => {
         playerDisplay.classList.remove(`player${currentPlayer}`);
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
@@ -84,23 +86,27 @@ window.addEventListener('DOMContentLoaded', () => {
 
         return true;
     };
-
+    //ユーザーアクション
     const userAction = (tile, index) => {
+        console.log(tile);
+        console.log(index);
         if(isValidAction(tile) && isGameActive) {
             tile.innerText = currentPlayer;
             tile.classList.add(`player${currentPlayer}`);
-            updateBoard(index);
-            handleResultValidation();
-            changePlayer();
+            updateBoard(index);//現在プレイヤーによって格子にxかoを入れる
+            handleResultValidation();//勝利検証を処理する
+            changePlayer();//選手交代
         }
     }
     //ゲームリセット
     const resetBoard = () => {
+        //ボード
         board = ['', '', '', '', '', '', '', '', ''];
         isGameActive = true;
         announcer.classList.add('hide');
 
         if (currentPlayer === 'O') {
+            //初期化xプレイヤー
             changePlayer();
         }
 
