@@ -1,8 +1,8 @@
 //DOMの読み込みが完了したときに処理を実行する
-//Ecma es7
+//Ecma es7規格
 //()=>{} アロー関数
 window.addEventListener('DOMContentLoaded', () => {
-    const tiles = Array.from(document.querySelectorAll('.tile'));//格子➞配列に似たオブジェクトから配列を作る
+    const tiles = Array.from(document.querySelectorAll('.tile'));//似た格子➞配列を作る
     const playerDisplay = document.querySelector('.display-player');
     const resetButton = document.querySelector('#reset');
     const announcer = document.querySelector('.announcer');//アナウンサー
@@ -41,17 +41,22 @@ window.addEventListener('DOMContentLoaded', () => {
                 break;
             }
         }
-    //勝ったひとが出たらお知らせとゲーム終了
-    if (roundWon) {
-            announce(currentPlayer === 'X' ? PLAYERX_WON : PLAYERO_WON);
-            isGameActive = false;
-            return;
-        }
-    //勝ったひとが出ない、入力場所もない→引き分けになります。
-    //配列内にある要素が含まれているかどうかを調べる
-    //入力場所まだあるかどうか判定します。
-    if (!board.includes(''))
-        announce(TIE);
+        console.log("board : " + board);
+        //勝ったひとが出たらお知らせとゲーム終了
+        if (roundWon) {
+                announce(currentPlayer === 'X' ? PLAYERX_WON : PLAYERO_WON);
+                isGameActive = false;
+                return;
+            }
+        //勝ったひとが出ない、入力場所もない→引き分けになります。
+        //配列内にある要素が含まれているかどうかを調べる
+        //入力場所まだあるかどうか判定します。
+        if (!board.includes(''))
+            announce(TIE);
+    }
+    //現在プレイヤーによって格子にxかoを入れる
+    const updateBoard =  (index) => {
+        board[index] = currentPlayer;
     }
     //お知らせ処理
     const announce = (type) => {
@@ -67,10 +72,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         announcer.classList.remove('hide');
     };
-    //格子にxかoを入れる
-    const updateBoard =  (index) => {
-        board[index] = currentPlayer;
-    }
     //選手交代
     const changePlayer = () => {
         playerDisplay.classList.remove(`player${currentPlayer}`);
