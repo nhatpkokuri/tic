@@ -1,6 +1,6 @@
 //DOMの読み込みが完了したときに処理を実行する
 //Ecma es7規格
-//()=>{} アロー関数
+//()=>{} アロー関数->巻き上げるletとconst使う限り不可能
 window.addEventListener('DOMContentLoaded', () => {
     const tiles = Array.from(document.querySelectorAll('.tile'));//似た格子➞配列を作る
     const playerDisplay = document.querySelector('.display-player');
