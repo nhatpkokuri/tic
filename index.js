@@ -30,6 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i <= 7; i++) {
             //チェック処理
             const winCondition = winningConditions[i];
+            //winningCondition[0] -> [0,1,2] -> board[1,2,3,,,,,,]
             const a = board[winCondition[0]];
             const b = board[winCondition[1]];
             const c = board[winCondition[2]];
@@ -44,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log("board : " + board);
         //勝ったひとが出たらお知らせとゲーム終了
         if (roundWon) {
-                announce(currentPlayer === 'X' ? PLAYERX_WON : PLAYERO_WON);
+                announce(currentPlayer === 'X' ? PLAYERX_WON : PLAYERO_WON);//三項演算子
                 isGameActive = false;
                 return;
             }
