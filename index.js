@@ -1,6 +1,10 @@
 //DOMの読み込みが完了したときに処理を実行する
 //Ecma es7規格
 //()=>{} アロー関数->巻き上げるletとconst使う限り不可能
+//三項演算子
+//bodyタグの最後にスクリプトがある理由
+//スクリプトはページのレンダリングをブロックしていません。
+//また、DOM操作に必要なDOMがすでに存在していることを確認します。
 window.addEventListener('DOMContentLoaded', () => {
     const tiles = Array.from(document.querySelectorAll('.tile'));//似た格子➞配列を作る
     const playerDisplay = document.querySelector('.display-player');
@@ -13,6 +17,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const PLAYERX_WON = 'PLAYERX_WON';//Xが勝つ
     const PLAYERO_WON = 'PLAYERO_WON';//Yが勝つ
     const TIE = 'TIE';//引き分け
+    /*
+        ボード内のインデックス
+        [0] [1] [2]
+        [3] [4] [5]
+        [6] [7] [8]
+    */
     //勝利条件全部8パターン
     const winningConditions = [
         [0, 1, 2],
@@ -21,8 +31,8 @@ window.addEventListener('DOMContentLoaded', () => {
         [0, 3, 6],
         [1, 4, 7],
         [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6]
+        [0, 4, 8],//斜め
+        [2, 4, 6]//斜め
     ];
     //勝利検証を処理する
     function handleResultValidation() {
@@ -31,6 +41,7 @@ window.addEventListener('DOMContentLoaded', () => {
             //チェック処理
             const winCondition = winningConditions[i];
             //winningCondition[0] -> [0,1,2] -> board[1,2,3,,,,,,]
+            //winningCondition[7] -> [2,4,6] -> board[0,,,,4,,,,8] 斜めの場合
             const a = board[winCondition[0]];
             const b = board[winCondition[1]];
             const c = board[winCondition[2]];
@@ -49,9 +60,9 @@ window.addEventListener('DOMContentLoaded', () => {
                 isGameActive = false;
                 return;
             }
-        //勝ったひとが出ない、入力場所もない→引き分けになります。
+        //勝ったひとが出ない、入力場所もなくなった→引き分けになる
         //配列内にある要素が含まれているかどうかを調べる
-        //入力場所まだあるかどうか判定します。
+        //入力場所まだあるかどうか判定する
         if (!board.includes(''))
             announce(TIE);
     }
@@ -71,6 +82,9 @@ window.addEventListener('DOMContentLoaded', () => {
             case TIE:
                 announcer.innerText = '引き分けだ。';
         }
+        //classList -> 特定の要素のクラス名を追加したり、削除したり、参照したりすること
+        //例： <div class="a hide">例文</div> -> <div class="a">例文</div>
+        // hideのクラスが削除された
         announcer.classList.remove('hide');
     };
     //選手交代
