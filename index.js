@@ -5,6 +5,7 @@
 //bodyタグの最後にスクリプトがある理由
 //スクリプトはページのレンダリングをブロックしていません。
 //また、DOM操作に必要なDOMがすでに存在していることを確認します。
+//elem.classList.contains(“class”) -> 対象の要素にクラス名が含まれていれば「true」、含まれていなければ「false」が返ります
 window.addEventListener('DOMContentLoaded', () => {
     const tiles = Array.from(document.querySelectorAll('.tile'));//似た格子➞配列を作る
     const playerDisplay = document.querySelector('.display-player');
